@@ -1,12 +1,16 @@
 import React from 'react';
 import Article from './Article'
 
-const ArticleList = ({articles, allArticles, turnPage}) => { 
+const ArticleList = ({articles, allArticles, turnPage, filterByDate}) => { 
 
     const handleClick = (evt) => {
         console.log(evt.target.value)
         turnPage(evt.target.value)
+    }
 
+    const handleSubmit = (evt) => {
+        evt.preventDefault()
+        filterByDate(evt.target.dateFrom.value)
     }
 
     const articleNodes = articles.map((article, index) => {
@@ -21,7 +25,11 @@ const ArticleList = ({articles, allArticles, turnPage}) => {
             <button onClick={handleClick} value="lower" >Previous Page</button>
             <button onClick={handleClick} value="higher" >Next Page</button>
             </p>
-
+            <p>Filter By Date From:</p>
+            <form onSubmit={handleSubmit}>
+                    <input type="date" name="dateFrom"></input>
+                    <input type="submit"></input>
+                </form>
 
             <h2>I'm the Article List</h2>
             <ul>

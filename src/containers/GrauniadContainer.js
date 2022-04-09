@@ -9,6 +9,8 @@ const GrauniadContainer = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [allSearchResults, setAllSearchResults] = useState([]);
     const [searched, setSearched] = useState("");
+    const [thePage, setPage] = useState(1);
+    const [dateFromm, setDateFrom] = useState("2000-01-01");
     
 
     useEffect(() => {
@@ -40,18 +42,32 @@ const GrauniadContainer = () => {
     const turnPage = (upOrDown) => {
         let page;
         if (upOrDown === 'higher'){
+            if (allSearchResults.currentPage === allSearchResults.pages){
+                return
+            }
             page = (allSearchResults.currentPage+1)
-        } else (
+        } else {
+            if (allSearchResults.currentPage > 1){
             page = (allSearchResults.currentPage-1)
-        ) 
-        setApiUrl(`https://content.guardianapis.com/search?page=${page}&q=${searched}&api-key=test`)
+            } else {return}
+        }
+        setApiUrl(`https://content.guardianapis.com/search?page=${page}&q=${searched}&from-date=${dateFromm}&api-key=test`)
+        setPage(page)
+        // console.log(thePage)
+    }
+
+    const filterByDate = (dateFrom) => {
+        // console.log(dateFrom)
+        setApiUrl(`https://content.guardianapis.com/search?page=${thePage}&q=${searched}&from-date=${dateFrom}&api-key=test`)
+        setDateFrom(dateFrom)
+        // console.log(dateFromm)
     }
 
     return (
         <div>
             <h2>The GrauniadContainer</h2>
             <SearchBar searchApi={searchApi}/>
-            <ArticleList articles = {searchResults} allArticles={allSearchResults} turnPage={turnPage} />
+            <ArticleList articles = {searchResults} allArticles={allSearchResults} turnPage={turnPage} filterByDate={filterByDate} />
         </div>
     )
 
